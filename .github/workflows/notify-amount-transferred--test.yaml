@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: aquaproj/aqua-installer@v0.6.0 # contains "aqua i"
+      - uses: aquaproj/aqua-installer@v0.7.0
         with:
           aqua_version: v0.10.2
           install_path: $HOME/.local/share/aquaproj-aqua/bin/aqua
