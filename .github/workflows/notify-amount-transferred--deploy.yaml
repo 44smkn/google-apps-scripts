@@ -1,0 +1,35 @@
+name: notify-amount-transferred / deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/notify-amount-transferred--deploy.yaml
+      - notify-amount-transferred/**
+
+defaults:
+  run:
+    working-directory: notify-amount-transferred
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - run: npm install @google/clasp@2.4.1 -g
+      - run: echo "$CLASPRC_JSON_SECRET" >> ~/.clasprc.json
+        env:
+          CLASPRC_JSON_SECRET: ${{ secrets.CLASPRC_JSON }}
+      - name: Set scriptId in .clasp.json
+        run: sed -i "s/<SCRIPT_ID>/$SCRIPT_ID/g" .clasp.json
+        env:
+          SCRIPT_ID: ${{ secrets.NOTIFY_AMOUNT_TRANSFFERED_SCRIPT_ID }}
+      - run: clasp login --status
+      - run: clasp push
+      - run: clasp deploy --description ${GITHUB_SHA::7}
+        env:
+          GITHUB_SHA: ${{ github.sha }}
