@@ -3,7 +3,7 @@ export interface NotificationMessage {
   body: string;
 }
 
-export class DefaultNotificationMessage implements NotificationMessage {
+export class AmountTransferredNotificationMessage implements NotificationMessage {
   private _subject: string;
   private _body: string;
 
