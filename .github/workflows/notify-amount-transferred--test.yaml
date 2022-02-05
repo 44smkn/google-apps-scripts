@@ -43,6 +43,7 @@ jobs:
         with:
           # update the pull request branch
           ref: ${{ github.head_ref }}
+          token:  ${{ secrets.GHA_TOKEN }}
       - uses: aquaproj/aqua-installer@v0.7.0
         with:
           aqua_version: v0.10.2
