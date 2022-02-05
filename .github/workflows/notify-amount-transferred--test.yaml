@@ -1,7 +1,13 @@
 name: notify-amount-transferred / test
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/notify-amount-transferred--test.yaml
+      - notify-amount-transferred/**
   pull_request:
+    branches: [main]
     paths:
       - .github/workflows/notify-amount-transferred--test.yaml
       - notify-amount-transferred/**
@@ -12,6 +18,7 @@ defaults:
 
 jobs:
   lint:
+    needs: fix
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -26,3 +33,24 @@ jobs:
           node-version: "16"
       - run: github-comment exec -- yarn install --frozen-lockfile
       - run: github-comment exec -- yarn lint
+
+  fix:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          # update the pull request branch
+          ref: ${{ github.head_ref }}
+          token:  ${{ secrets.GHA_TOKEN }}
+      - uses: aquaproj/aqua-installer@v0.7.0
+        with:
+          aqua_version: v0.10.2
+      - run: github-comment exec -- yarn install --frozen-lockfile
+      - run: github-comment exec -- yarn fix
+      - uses: int128/update-generated-files-action@main
+        id: update-generated-files-action
+      - name: stop this workflow when the branch is updated
+        if: steps.update-generated-files-action.outputs.updated-sha
+        run: exit 99
