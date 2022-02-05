@@ -20,7 +20,7 @@ export class AppConfig {
   }
 
   get housingCost() {
-    return this._housingCost
+    return this._housingCost;
   }
 }
 
