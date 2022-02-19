@@ -50,7 +50,3 @@ jobs:
       - run: github-comment exec -- yarn install --frozen-lockfile
       - run: github-comment exec -- yarn fix
       - uses: int128/update-generated-files-action@v2
-        id: update-generated-files-action
-      - name: stop this workflow when the branch is updated
-        if: steps.update-generated-files-action.outputs.updated-sha
-        run: exit 99
