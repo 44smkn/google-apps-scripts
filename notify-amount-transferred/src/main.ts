@@ -1,5 +1,5 @@
 import {BillingFetcherViaGmail} from './billing';
-import { calculateAmountPerCapita } from './calc-amount';
+import {calculateAmountPerCapita} from './calc-amount';
 import {AppConfig} from './config';
 import {DefaultNotificationMessage} from './message';
 import {NotifierFactory} from './notify';
