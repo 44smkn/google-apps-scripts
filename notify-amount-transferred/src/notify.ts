@@ -36,8 +36,8 @@ class MailNotifier implements Notifier {
     this.recipients.forEach((recipient) => {
       GmailApp.sendEmail(
         recipient,
-        this.notificationMessage.getSubject(),
-        this.notificationMessage.getBody()
+        this.notificationMessage.subject,
+        this.notificationMessage.body
       );
     });
   }
@@ -48,7 +48,7 @@ class LINENotifier implements Notifier {
 
   notify() {
     const formData = {
-      message: this.notificationMessage.getBody(),
+      message: this.notificationMessage.body,
     };
     const params: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {
       method: 'post',

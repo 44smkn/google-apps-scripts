@@ -1,6 +1,6 @@
 import {BillingFetcherViaGmail} from './billing';
 import {AppConfig} from './config';
-import {DefaultNotificationMessage} from './message';
+import {AmountTransferredNotificationMessage} from './message';
 import {NotifierFactory} from './notify';
 import {ScriptPropertyStore} from './property';
 
@@ -11,7 +11,7 @@ function main() {
 
   // Calc
   const billing = new BillingFetcherViaGmail(config.sharedCreditBilling).fetch();
-  const message = new DefaultNotificationMessage(billing, config.housingCost.sum());
+  const message = new AmountTransferredNotificationMessage(billing, config.housingCost.sum());
 
   // Notify
   const notifier = new NotifierFactory().create(message, props);
