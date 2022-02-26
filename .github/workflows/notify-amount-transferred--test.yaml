@@ -50,3 +50,18 @@ jobs:
       - run: github-comment exec -- yarn install --frozen-lockfile
       - run: github-comment exec -- yarn fix
       - uses: int128/update-generated-files-action@v2
+
+  test:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: aquaproj/aqua-installer@v1.0.0
+        with:
+          aqua_version: v1.1.0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - run: github-comment exec -- yarn install --frozen-lockfile
+      - run: github-comment exec -- yarn test
