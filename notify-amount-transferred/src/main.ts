@@ -6,7 +6,7 @@ import {ScriptPropertyStore} from './property';
 
 // Google Apps Script does not support ES modules
 // https://github.com/google/clasp/blob/master/docs/typescript.md#the-exports-declaration-workaround
-declare const calcAmount: typeof import('./calc-amount');
+declare const exports: typeof import('./calc-amount');
 
 function main() {
   // Initialize
@@ -16,7 +16,7 @@ function main() {
   // Calc
   const billing = new BillingFetcherViaGmail(config.sharedCreditBilling).fetch();
   const housingCost = config.housingCost.sum();
-  const amountPerCapita = calcAmount.calculateAmountPerCapita(housingCost, billing);
+  const amountPerCapita = exports.calculateAmountPerCapita(housingCost, billing);
   const message = new DefaultNotificationMessage(housingCost, billing, amountPerCapita);
 
   // Notify
