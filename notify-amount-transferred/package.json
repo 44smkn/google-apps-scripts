@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@types/google-apps-script": "1.0.45"
+    "@types/google-apps-script": "1.0.46"
   },
   "devDependencies": {
     "@types/jest": "27.4.1",
