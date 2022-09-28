@@ -1,5 +1,5 @@
 {
-  extends: ["config:base", "github>aquaproj/aqua-renovate-config#1.2.5"],
+  extends: ["config:base", "github>aquaproj/aqua-renovate-config#1.2.6"],
   reviewers: ["44smkn"],
   labels: ["renovate"],
   packageRules: [
