@@ -1,6 +1,7 @@
 export interface NotificationMessage {
   getSubject(): string;
   getBody(): string;
+  getCombinationOfSubjectAndBody(): string;
 }
 
 export class DefaultNotificationMessage implements NotificationMessage {
@@ -8,13 +9,9 @@ export class DefaultNotificationMessage implements NotificationMessage {
   private body: string;
 
   constructor(housingCost: number, billing: number, amountPerCapita: number) {
-    this.subject = `Amount to be transferred to the common account this month: ${amountPerCapita.toLocaleString()} yen`;
-    this.body = `
-- Rent: ${housingCost.toLocaleString()} yen
-- Shared credit card billing: ${billing.toLocaleString()} yen
-
-Please transfer ${amountPerCapita.toLocaleString()} yen per person to the common account.
-`;
+    const date = new Date();
+    this.subject = `${date.getFullYear()}年${date.getMonth() + 1}月分の共通口座への振込金額`;
+    this.body = `${billing.toLocaleString()} 円を共通口座に振り込んでください`;
   }
 
   getSubject(): string {
@@ -23,5 +20,10 @@ Please transfer ${amountPerCapita.toLocaleString()} yen per person to the common
 
   getBody(): string {
     return this.body;
+  }
+
+  getCombinationOfSubjectAndBody(): string {
+    return `${this.getSubject()}:
+    ${this.getBody()}`;
   }
 }
