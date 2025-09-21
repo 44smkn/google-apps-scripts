@@ -36,19 +36,13 @@ jobs:
 
   fix:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
-        with:
-          # update the pull request branch
-          ref: ${{ github.head_ref }}
-          token:  ${{ secrets.GHA_TOKEN }}
+      - uses: actions/checkout@v4
       - uses: aquaproj/aqua-installer@v1.2.0
         with:
           aqua_version: v1.38.0
-      - run: github-comment exec -- yarn install --frozen-lockfile
-      - run: github-comment exec -- yarn fix
+      - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- yarn install --frozen-lockfile
+      - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- yarn fix
       - uses: int128/update-generated-files-action@v2
 
   test:
