@@ -7,10 +7,14 @@ export class NotifierFactory {
     switch (provider) {
       case 'line': {
         const token = props.get('line-notify-token');
+        const recipient = props.get('line-notify-recipient');
         if (token == null) {
           throw Error('Failed to get line token');
         }
-        return new LINENotifier(token, notificationMessage);
+        if (recipient == null) {
+          throw Error('Failed to get line recipient');
+        }
+        return new LINENotifier(token, recipient, notificationMessage);
       }
       case 'email': {
         const recipients = props.get('email-recipients');
@@ -44,19 +48,25 @@ class MailNotifier implements Notifier {
 }
 
 class LINENotifier implements Notifier {
-  constructor(private token: string, private notificationMessage: NotificationMessage) {}
+  constructor(
+    private channelAccessToken: string,
+    private recipient: string,
+    private notificationMessage: NotificationMessage
+  ) {}
 
   notify() {
-    const formData = {
-      message: this.notificationMessage.getBody(),
+    const payload = {
+      to: this.recipient,
+      messages: [this.notificationMessage.getCombinationOfSubjectAndBody()],
     };
     const params: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {
       method: 'post',
       headers: {
-        Authorization: `Bearer ${this.token}`,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.channelAccessToken}`,
       },
-      payload: formData,
+      payload: JSON.stringify(payload),
     };
-    UrlFetchApp.fetch('https://notify-api.line.me/api/notify', params);
+    UrlFetchApp.fetch('https://api.line.me/v2/bot/message/push', params);
   }
 }
