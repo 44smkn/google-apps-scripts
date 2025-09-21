@@ -1,5 +1,5 @@
-import { PropertyStore } from './property';
-import { NotificationMessage } from './message';
+import {PropertyStore} from './property';
+import {NotificationMessage} from './message';
 
 export class NotifierFactory {
   create(notificationMessage: NotificationMessage, props: PropertyStore): Notifier {
@@ -34,7 +34,7 @@ interface Notifier {
 }
 
 class MailNotifier implements Notifier {
-  constructor(private recipients: string[], private notificationMessage: NotificationMessage) { }
+  constructor(private recipients: string[], private notificationMessage: NotificationMessage) {}
 
   notify() {
     this.recipients.forEach((recipient) => {
@@ -48,7 +48,11 @@ class MailNotifier implements Notifier {
 }
 
 class LINENotifier implements Notifier {
-  constructor(private channelAccessToken: string, private recipient: string, private notificationMessage: NotificationMessage) { }
+  constructor(
+    private channelAccessToken: string,
+    private recipient: string,
+    private notificationMessage: NotificationMessage
+  ) {}
 
   notify() {
     const payload = {
