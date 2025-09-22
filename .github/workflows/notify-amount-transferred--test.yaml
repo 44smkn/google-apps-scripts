@@ -28,7 +28,7 @@ jobs:
       - uses: aquaproj/aqua-installer@v1.2.0
         with:
           aqua_version: v1.38.0
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v5
         with:
           node-version: "16"
       - run: github-comment exec -- yarn install --frozen-lockfile
@@ -54,7 +54,7 @@ jobs:
       - uses: aquaproj/aqua-installer@v1.2.0
         with:
           aqua_version: v1.38.0
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v5
         with:
           node-version: "16"
       - run: github-comment exec -- yarn install --frozen-lockfile
