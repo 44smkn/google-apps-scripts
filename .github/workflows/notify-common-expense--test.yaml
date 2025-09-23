@@ -43,7 +43,7 @@ jobs:
         with:
           node-version: "20"
       - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- npm ci
-      - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- npm fix
+      - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- npm run format
       - uses: int128/update-generated-files-action@v2
 
   test:
