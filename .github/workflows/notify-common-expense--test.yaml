@@ -18,7 +18,7 @@ defaults:
 
 jobs:
   lint:
-    needs: fix
+    needs: format
     runs-on: ubuntu-latest
 
     steps:
@@ -29,10 +29,10 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: "20"
-      - run: github-comment exec -- npm ci
-      - run: github-comment exec -- npm lint
+      - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- npm ci
+      - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- npm lint
 
-  fix:
+  format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -47,7 +47,7 @@ jobs:
       - uses: int128/update-generated-files-action@v2
 
   test:
-    needs: fix
+    needs: format
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -57,5 +57,5 @@ jobs:
       - uses: actions/setup-node@v5
         with:
           node-version: "20"
-      - run: github-comment exec -- npm ci
-      - run: github-comment exec -- npm test
+      - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- npm ci
+      - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- npm test
