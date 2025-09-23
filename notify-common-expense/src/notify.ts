@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { PropertyStore } from './property';
-import { NotificationMessage } from './message';
+import { NotificationMessage, getCombinationOfSubjectAndBody } from './message';
 
 export class NotifierFactory {
   create(
@@ -61,8 +61,8 @@ class MailNotifier implements Notifier {
     this.recipients.forEach(recipient => {
       GmailApp.sendEmail(
         recipient,
-        this.notificationMessage.getSubject(),
-        this.notificationMessage.getBody()
+        this.notificationMessage.subject,
+        this.notificationMessage.body
       );
     });
   }
@@ -81,7 +81,7 @@ class LINENotifier implements Notifier {
       messages: [
         {
           type: 'text',
-          text: this.notificationMessage.getCombinationOfSubjectAndBody(),
+          text: getCombinationOfSubjectAndBody(this.notificationMessage),
         },
       ],
     };

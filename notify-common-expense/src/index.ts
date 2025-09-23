@@ -15,7 +15,7 @@
  */
 import { BillingFetcherViaGmail } from './billing';
 import { AppConfig } from './config';
-import { DefaultNotificationMessage } from './message';
+import { createNotificationMessage } from './message';
 import { NotifierFactory } from './notify';
 import { ScriptPropertyStore } from './property';
 import { calculateCostPerPerson } from './calc-amount';
@@ -29,7 +29,7 @@ function main() {
   // Calc
   const billing = new BillingFetcherViaGmail(config.creditCardBilling).fetch();
   const costPerPerson = calculateCostPerPerson(billing);
-  const message = new DefaultNotificationMessage(costPerPerson);
+  const message = createNotificationMessage(costPerPerson);
 
   // Notify
   const notifier = new NotifierFactory().create(message, props);
