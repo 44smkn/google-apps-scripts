@@ -1,14 +1,27 @@
-import {PropertyStore} from './property';
+/**
+ * Copyright 2023 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import { PropertyStore } from './property';
 
 export class AppConfig {
   private _sharedCreditBilling: SharedCreditBilling;
   private _notification: Notification;
-  private _housingCost: HousingCost;
 
   constructor(props: PropertyStore) {
     this._sharedCreditBilling = new SharedCreditBilling(props);
     this._notification = new Notification(props);
-    this._housingCost = new HousingCost(props);
   }
 
   get sharedCreditBilling() {
@@ -17,10 +30,6 @@ export class AppConfig {
 
   get notification() {
     return this._notification;
-  }
-
-  get housingCost() {
-    return this._housingCost;
   }
 }
 
@@ -77,31 +86,6 @@ class Notification {
 
   get emailRecipients() {
     return this._emailRecipients;
-  }
-}
-
-class HousingCost {
-  private _rent: number;
-  private _maintenanceFee: number;
-
-  constructor(props: PropertyStore) {
-    const rentKey = 'rent';
-    const maintenanceFeeKey = 'maintenance-fee';
-
-    this._rent = Number(getProperty(props, rentKey));
-    this._maintenanceFee = Number(getProperty(props, maintenanceFeeKey));
-  }
-
-  get rent() {
-    return this._rent;
-  }
-
-  get maintenanceFee() {
-    return this._maintenanceFee;
-  }
-
-  sum(): number {
-    return this._rent + this._maintenanceFee;
   }
 }
 

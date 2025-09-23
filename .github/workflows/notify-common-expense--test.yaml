@@ -1,0 +1,61 @@
+name: notify-common-expense / test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/notify-common-expense--test.yaml
+      - notify-common-expense/**
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/notify-common-expense--test.yaml
+      - notify-common-expense/**
+
+defaults:
+  run:
+    working-directory: notify-common-expense
+
+jobs:
+  lint:
+    needs: fix
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: aquaproj/aqua-installer@v4.0.3
+        with:
+          aqua_version: v2.55.0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+      - run: github-comment exec -- npm ci
+      - run: github-comment exec -- npm lint
+
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: aquaproj/aqua-installer@v4.0.3
+        with:
+          aqua_version: v2.55.0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+      - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- npm ci
+      - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- npm fix
+      - uses: int128/update-generated-files-action@v2
+
+  test:
+    needs: fix
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: aquaproj/aqua-installer@v4.0.3
+        with:
+          aqua_version: v2.55.0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+      - run: github-comment exec -- npm ci
+      - run: github-comment exec -- npm test
