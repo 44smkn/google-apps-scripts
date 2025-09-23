@@ -1,8 +1,26 @@
-import {PropertyStore} from './property';
-import {NotificationMessage} from './message';
+/**
+ * Copyright 2023 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import { PropertyStore } from './property';
+import { NotificationMessage } from './message';
 
 export class NotifierFactory {
-  create(notificationMessage: NotificationMessage, props: PropertyStore): Notifier {
+  create(
+    notificationMessage: NotificationMessage,
+    props: PropertyStore
+  ): Notifier {
     const provider = props.get('notification-provider') ?? 'line';
     switch (provider) {
       case 'line': {
@@ -34,10 +52,13 @@ interface Notifier {
 }
 
 class MailNotifier implements Notifier {
-  constructor(private recipients: string[], private notificationMessage: NotificationMessage) {}
+  constructor(
+    private recipients: string[],
+    private notificationMessage: NotificationMessage
+  ) {}
 
   notify() {
-    this.recipients.forEach((recipient) => {
+    this.recipients.forEach(recipient => {
       GmailApp.sendEmail(
         recipient,
         this.notificationMessage.getSubject(),
@@ -57,13 +78,18 @@ class LINENotifier implements Notifier {
   notify() {
     const payload = {
       to: this.recipient,
-      messages: [this.notificationMessage.getCombinationOfSubjectAndBody()],
+      messages: [
+        {
+          type: 'text',
+          text: this.notificationMessage.getCombinationOfSubjectAndBody(),
+        },
+      ],
     };
     const params: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.channelAccessToken}`,
+        'Authorization': `Bearer ${this.channelAccessToken}`,
       },
       payload: JSON.stringify(payload),
     };

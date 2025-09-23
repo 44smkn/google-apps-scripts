@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "target": "es2019", // Typescript users should update their tsconfig.json with the "target": "ES2019" compiler option
-    "lib": ["esnext"],
-    "experimentalDecorators": true,
-    "strict": true
-  },
-  "include": ["src/**/*"]
-}
