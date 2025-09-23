@@ -1,0 +1,34 @@
+name: notify-common-expense / deploy
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/notify-common-expense--deploy.yaml
+      - notify-common-expense/**
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/notify-common-expense--deploy.yaml
+      - notify-common-expense/**
+
+defaults:
+  run:
+    working-directory: notify-common-expense
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "20"
+      - run: npm ci
+      - run: |
+          mkdir -p "${HOME}"
+          echo '${{ secrets.CLASPRC_JSON }}' > "${HOME}/.clasprc.json"
+        env:
+          CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
+      - run: npm run deploy:prod
