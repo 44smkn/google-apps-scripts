@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { calculateCommonExpensePerPerson } from '../src/calc-amount';
+import { calculateShouldBeTransferred } from '../src/calc-amount';
 
 test('calc common expense per person', () => {
   const billing = 777777;
   const want = 389000; // 777,777 / 2 -> 388888.5 -> 389000
-  expect(calculateCommonExpensePerPerson(billing)).toBe(want);
+  expect(calculateShouldBeTransferred(billing)).toBe(want);
 });

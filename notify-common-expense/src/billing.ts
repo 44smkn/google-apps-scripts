@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SharedCreditBilling } from './config';
+import { CreditCardBilling } from './config';
 
 export interface BillingFetcher {
   fetch(): number;
@@ -21,7 +21,7 @@ export interface BillingFetcher {
 
 export class BillingFetcherViaGmail implements BillingFetcher {
   constructor(
-    private config: SharedCreditBilling,
+    private config: CreditCardBilling,
     private gmail: GoogleAppsScript.Gmail.GmailApp = GmailApp
   ) {}
 

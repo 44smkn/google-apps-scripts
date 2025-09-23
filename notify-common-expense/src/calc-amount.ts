@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export function calculateCommonExpensePerPerson(billing: number): number {
+export function calculateCostPerPerson(billing: number): number {
   const costPerPerson = billing / 2;
   // 123,456 -> 124,000
   return Math.ceil(costPerPerson / 1000) * 1000;

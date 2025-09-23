@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { calculateCommonExpensePerPerson } from './calc-amount';
 
 export interface NotificationMessage {
   getSubject(): string;
@@ -25,11 +24,10 @@ export class DefaultNotificationMessage implements NotificationMessage {
   private subject: string;
   private body: string;
 
-  constructor(billing: number) {
+  constructor(costPerPerson: number) {
     const date = new Date();
-    const commonExpensePerPerson = calculateCommonExpensePerPerson(billing);
     this.subject = `${date.getFullYear()}年${date.getMonth() + 1}月分の共通口座への振込金額通知`;
-    this.body = `${commonExpensePerPerson.toLocaleString()} 円を月末までに共通口座に振り込んでください`;
+    this.body = `${costPerPerson.toLocaleString()} 円を月末までに共通口座に振り込んでください`;
   }
 
   getSubject(): string {

@@ -18,10 +18,7 @@ import { AppConfig } from './config';
 import { DefaultNotificationMessage } from './message';
 import { NotifierFactory } from './notify';
 import { ScriptPropertyStore } from './property';
-
-// Google Apps Script does not support ES modules
-// https://github.com/google/clasp/blob/master/docs/typescript.md#the-exports-declaration-workaround
-declare const exports: typeof import('./calc-amount');
+import { calculateCostPerPerson } from './calc-amount';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function main() {
@@ -30,10 +27,9 @@ function main() {
   const config = new AppConfig(props);
 
   // Calc
-  const billing = new BillingFetcherViaGmail(
-    config.sharedCreditBilling
-  ).fetch();
-  const message = new DefaultNotificationMessage(billing);
+  const billing = new BillingFetcherViaGmail(config.creditCardBilling).fetch();
+  const costPerPerson = calculateCostPerPerson(billing);
+  const message = new DefaultNotificationMessage(costPerPerson);
 
   // Notify
   const notifier = new NotifierFactory().create(message, props);
