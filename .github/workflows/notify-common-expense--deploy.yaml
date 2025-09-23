@@ -6,11 +6,6 @@ on:
     paths:
       - .github/workflows/notify-common-expense--deploy.yaml
       - notify-common-expense/**
-  pull_request:
-    branches: [main]
-    paths:
-      - .github/workflows/notify-common-expense--deploy.yaml
-      - notify-common-expense/**
 
 defaults:
   run:
