@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: "20"
       - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- npm ci
-      - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- npm lint
+      - run: github-comment exec --token ${{ secrets.GITHUB_TOKEN }} -- npm run lint
 
   format:
     runs-on: ubuntu-latest
