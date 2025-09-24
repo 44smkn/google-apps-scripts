@@ -16,7 +16,7 @@
 import { BillingFetcherViaGmail } from './billing';
 import { AppConfig } from './config';
 import { createNotificationMessage } from './message';
-import { NotifierFactory } from './notify';
+import { createNotifier } from './notify';
 import { ScriptPropertyStore } from './property';
 import { calculateCostPerPerson } from './calc-amount';
 
@@ -32,6 +32,6 @@ function main() {
   const message = createNotificationMessage(costPerPerson);
 
   // Notify
-  const notifier = new NotifierFactory().create(message, props);
+  const notifier = createNotifier(message, props);
   notifier.notify();
 }

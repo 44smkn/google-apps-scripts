@@ -19,45 +19,42 @@ import { NotificationMessage, getCombinationOfSubjectAndBody } from './message';
 /** Supported notification provider types. */
 type NotificationProvider = 'line' | 'email';
 
-/** Factory class for creating notification instances. */
-export class NotifierFactory {
-  /**
-   * Creates a notifier instance based on the specified provider.
-   * @param notificationMessage The message to be sent.
-   * @param props Property store containing configuration.
-   * @returns A notifier instance.
-   */
-  create(
-    notificationMessage: NotificationMessage,
-    props: PropertyStore
-  ): Notifier {
-    const provider = (props.get('notification-provider') ??
-      'line') as NotificationProvider;
+/**
+ * Creates a notifier instance based on the specified provider.
+ * @param notificationMessage The message to be sent.
+ * @param props Property store containing configuration.
+ * @returns A notifier instance.
+ */
+export function createNotifier(
+  notificationMessage: NotificationMessage,
+  props: PropertyStore
+): Notifier {
+  const provider = (props.get('notification-provider') ??
+    'line') as NotificationProvider;
 
-    switch (provider) {
-      case 'line': {
-        const token = props.get('line-notify-token');
-        const recipient = props.get('line-notify-recipient');
-        if (!token) {
-          throw new Error('LINE notification token is required but not found');
-        }
-        if (!recipient) {
-          throw new Error(
-            'LINE notification recipient is required but not found'
-          );
-        }
-        return new LINENotifier(token, recipient, notificationMessage);
+  switch (provider) {
+    case 'line': {
+      const token = props.get('line-notify-token');
+      const recipient = props.get('line-notify-recipient');
+      if (!token) {
+        throw new Error('LINE notification token is required but not found');
       }
-      case 'email': {
-        const recipients = props.get('email-recipients');
-        if (!recipients) {
-          throw new Error('Email recipients are required but not found');
-        }
-        return new MailNotifier(recipients.split(','), notificationMessage);
+      if (!recipient) {
+        throw new Error(
+          'LINE notification recipient is required but not found'
+        );
       }
-      default:
-        throw new Error(`Unsupported notification provider: ${provider}`);
+      return new LINENotifier(token, recipient, notificationMessage);
     }
+    case 'email': {
+      const recipients = props.get('email-recipients');
+      if (!recipients) {
+        throw new Error('Email recipients are required but not found');
+      }
+      return new MailNotifier(recipients.split(','), notificationMessage);
+    }
+    default:
+      throw new Error(`Unsupported notification provider: ${provider}`);
   }
 }
 
