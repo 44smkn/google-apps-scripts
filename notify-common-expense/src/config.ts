@@ -16,76 +16,44 @@
 import { PropertyStore } from './property';
 
 export class AppConfig {
-  private _sharedCreditBilling: SharedCreditBilling;
-  private _notification: Notification;
+  readonly creditCardBilling: CreditCardBilling;
+  readonly notification: Notification;
 
   constructor(props: PropertyStore) {
-    this._sharedCreditBilling = new SharedCreditBilling(props);
-    this._notification = new Notification(props);
-  }
-
-  get sharedCreditBilling() {
-    return this._sharedCreditBilling;
-  }
-
-  get notification() {
-    return this._notification;
+    this.creditCardBilling = new CreditCardBilling(props);
+    this.notification = new Notification(props);
   }
 }
 
-export class SharedCreditBilling {
-  private _mailAddress: string;
-  private _mailSubject: string;
-  private _extractRegexp: RegExp;
+export class CreditCardBilling {
+  readonly mailAddress: string;
+  readonly mailSubject: string;
+  readonly extractRegexp: RegExp;
 
   constructor(props: PropertyStore) {
     const mailAddressKey = 'shared-credit-billing-mail-address';
     const mailSubjectKey = 'shared-credit-billing-mail-subject';
     const extractRegexpKey = 'shared-credit-billing-extract-regexp';
 
-    this._mailAddress = getProperty(props, mailAddressKey);
-    this._mailSubject = getProperty(props, mailSubjectKey);
-    this._extractRegexp = new RegExp(getProperty(props, extractRegexpKey));
-  }
-
-  get mailAddress() {
-    return this._mailAddress;
-  }
-
-  get mailSubject() {
-    return this._mailSubject;
-  }
-
-  get extractRegexp() {
-    return this._extractRegexp;
+    this.mailAddress = getProperty(props, mailAddressKey);
+    this.mailSubject = getProperty(props, mailSubjectKey);
+    this.extractRegexp = new RegExp(getProperty(props, extractRegexpKey));
   }
 }
 
 class Notification {
-  private _notificationProvider: string;
-  private _lineNotifyToken: string;
-  private _emailRecipients: string;
+  readonly notificationProvider: string;
+  readonly lineNotifyToken: string;
+  readonly emailRecipients: string;
 
   constructor(props: PropertyStore) {
     const notificationProviderKey = 'notification-provider';
     const lineNotifyTokenKey = 'line-notify-token';
     const emailRecipientsKey = 'email-recipients';
 
-    this._notificationProvider = getProperty(props, notificationProviderKey);
-    this._lineNotifyToken = getProperty(props, lineNotifyTokenKey);
-    this._emailRecipients = getProperty(props, emailRecipientsKey);
-  }
-
-  get notificationProvider() {
-    return this._notificationProvider;
-  }
-
-  get lineNotifyToken() {
-    return this._lineNotifyToken;
-  }
-
-  get emailRecipients() {
-    return this._emailRecipients;
+    this.notificationProvider = getProperty(props, notificationProviderKey);
+    this.lineNotifyToken = getProperty(props, lineNotifyTokenKey);
+    this.emailRecipients = getProperty(props, emailRecipientsKey);
   }
 }
 
