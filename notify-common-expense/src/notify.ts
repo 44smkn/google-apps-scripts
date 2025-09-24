@@ -16,48 +16,65 @@
 import { PropertyStore } from './property';
 import { NotificationMessage, getCombinationOfSubjectAndBody } from './message';
 
+/** Supported notification provider types. */
+type NotificationProvider = 'line' | 'email';
+
+/** Factory class for creating notification instances. */
 export class NotifierFactory {
+  /**
+   * Creates a notifier instance based on the specified provider.
+   * @param notificationMessage The message to be sent.
+   * @param props Property store containing configuration.
+   * @returns A notifier instance.
+   */
   create(
     notificationMessage: NotificationMessage,
     props: PropertyStore
   ): Notifier {
-    const provider = props.get('notification-provider') ?? 'line';
+    const provider = (props.get('notification-provider') ??
+      'line') as NotificationProvider;
+
     switch (provider) {
       case 'line': {
         const token = props.get('line-notify-token');
         const recipient = props.get('line-notify-recipient');
-        if (token == null) {
-          throw Error('Failed to get line token');
+        if (!token) {
+          throw new Error('LINE notification token is required but not found');
         }
-        if (recipient == null) {
-          throw Error('Failed to get line recipient');
+        if (!recipient) {
+          throw new Error(
+            'LINE notification recipient is required but not found'
+          );
         }
         return new LINENotifier(token, recipient, notificationMessage);
       }
       case 'email': {
         const recipients = props.get('email-recipients');
-        if (recipients == null) {
-          throw Error('Failed to get email-recipients');
+        if (!recipients) {
+          throw new Error('Email recipients are required but not found');
         }
         return new MailNotifier(recipients.split(','), notificationMessage);
       }
       default:
-        throw Error('An unsupported provider name was specified');
+        throw new Error(`Unsupported notification provider: ${provider}`);
     }
   }
 }
 
+/** Interface for notification providers. */
 interface Notifier {
+  /** Sends the notification. */
   notify(): void;
 }
 
+/** Email notification implementation. */
 class MailNotifier implements Notifier {
   constructor(
-    private recipients: string[],
-    private notificationMessage: NotificationMessage
+    private readonly recipients: readonly string[],
+    private readonly notificationMessage: NotificationMessage
   ) {}
 
-  notify() {
+  notify(): void {
     this.recipients.forEach(recipient => {
       GmailApp.sendEmail(
         recipient,
@@ -68,14 +85,18 @@ class MailNotifier implements Notifier {
   }
 }
 
+/** LINE notification implementation. */
 class LINENotifier implements Notifier {
+  private static readonly LINE_API_URL =
+    'https://api.line.me/v2/bot/message/push';
+
   constructor(
-    private channelAccessToken: string,
-    private recipient: string,
-    private notificationMessage: NotificationMessage
+    private readonly channelAccessToken: string,
+    private readonly recipient: string,
+    private readonly notificationMessage: NotificationMessage
   ) {}
 
-  notify() {
+  notify(): void {
     const payload = {
       to: this.recipient,
       messages: [
@@ -93,6 +114,6 @@ class LINENotifier implements Notifier {
       },
       payload: JSON.stringify(payload),
     };
-    UrlFetchApp.fetch('https://api.line.me/v2/bot/message/push', params);
+    UrlFetchApp.fetch(LINENotifier.LINE_API_URL, params);
   }
 }
