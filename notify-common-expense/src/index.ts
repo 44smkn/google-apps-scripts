@@ -15,10 +15,9 @@
  */
 import { BillingFetcherViaGmail } from './billing';
 import { AppConfig } from './config';
-import { createNotificationMessage } from './message';
+import { createNotificationMessage, calculateCostPerPerson } from './message';
 import { createNotifier } from './notify';
 import { ScriptPropertyStore } from './property';
-import { calculateCostPerPerson } from './calc-amount';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function main() {

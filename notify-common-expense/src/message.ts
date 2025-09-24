@@ -19,6 +19,12 @@ export type NotificationMessage = {
   body: string;
 };
 
+export function calculateCostPerPerson(billing: number): number {
+  const costPerPerson = billing / 2;
+  // 123,456 -> 124,000
+  return Math.ceil(costPerPerson / 1000) * 1000;
+}
+
 export function createNotificationMessage(
   costPerPerson: number
 ): NotificationMessage {
