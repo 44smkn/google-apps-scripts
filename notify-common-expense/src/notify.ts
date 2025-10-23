@@ -34,6 +34,7 @@ export function createNotifier(
 
   switch (provider) {
     case 'line': {
+      console.info('Using LINE as notification provider');
       const token = props.get('line-notify-token');
       const recipient = props.get('line-notify-recipient');
       if (!token) {
@@ -47,6 +48,7 @@ export function createNotifier(
       return new LINENotifier(token, recipient, notificationMessage);
     }
     case 'email': {
+      console.info('Using Email as notification provider');
       const recipients = props.get('email-recipients');
       if (!recipients) {
         throw new Error('Email recipients are required but not found');
@@ -103,6 +105,7 @@ class LINENotifier implements Notifier {
         },
       ],
     };
+    console.info('Sending LINE notification with payload:', payload);
     const params: GoogleAppsScript.URL_Fetch.URLFetchRequestOptions = {
       method: 'post',
       headers: {

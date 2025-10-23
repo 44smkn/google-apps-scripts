@@ -44,6 +44,9 @@ export class BillingFetcherViaGmail implements BillingFetcher {
     if (messages.length === 0) {
       throw Error(`There are no messsage in email that match. query: ${query}`);
     }
+    console.info(
+      `Found email from: ${messages[0].getFrom()}, subject: ${messages[0].getSubject()}`
+    );
 
     const found = messages[0].getBody().match(this.config.extractRegexp);
     if (found == null || found.length < 2) {
@@ -51,6 +54,8 @@ export class BillingFetcherViaGmail implements BillingFetcher {
     }
 
     const billing = Number(found[1].replace(/,/g, ''));
+
+    console.info(`Fetched billing amount: ${billing}`);
     return billing;
   }
 }

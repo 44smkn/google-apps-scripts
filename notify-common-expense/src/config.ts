@@ -60,7 +60,8 @@ class Notification {
 function getProperty(props: PropertyStore, key: string): string {
   const val = props.get(key);
   if (val == null) {
-    throw Error(`Not found key ${key} in propety store`);
+    console.error('Error occurred:', `Not found key ${key} in property store`);
+    throw Error(`Not found key ${key} in property store`);
   }
   return val;
 }
