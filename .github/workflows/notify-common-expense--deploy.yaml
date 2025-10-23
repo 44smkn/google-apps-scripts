@@ -21,9 +21,10 @@ jobs:
         with:
           node-version: "22"
       - run: npm ci
+      - name: Generate .clasp.json
+        run: |
+          echo "{\"scriptId\":\"${{ secrets.CLASP_SCRIPT_ID }}\",\"rootDir\":\"dist\"}" > .clasp-prod.json
       - run: |
           mkdir -p "${HOME}"
           echo '${{ secrets.CLASPRC_JSON }}' > "${HOME}/.clasprc.json"
-        env:
-          CLASPRC_JSON: ${{ secrets.CLASPRC_JSON }}
       - run: npm run deploy:prod
