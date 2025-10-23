@@ -23,7 +23,7 @@ jobs:
       - run: npm ci
       - name: Generate .clasp.json
         run: |
-          echo "{\"scriptId\":\"${{ secrets.CLASP_SCRIPT_ID }}\",\"rootDir\":\"dist\"}" > .clasp-prod.json
+          echo "{\"scriptId\":\"${{ secrets.NOTIFY_COMMON_EXPENSE_SCRIPT_ID }}\",\"rootDir\":\"dist\"}" > .clasp.json
       - run: |
           mkdir -p "${HOME}"
           echo '${{ secrets.CLASPRC_JSON }}' > "${HOME}/.clasprc.json"
