@@ -23,14 +23,14 @@ export class BillingFetcherViaGmail implements BillingFetcher {
   constructor(
     private config: CreditCardBilling,
     private gmail: GoogleAppsScript.Gmail.GmailApp = GmailApp
-  ) {}
+  ) { }
 
   fetch(): number {
     const query = `from:(${this.config.mailAddress}) subject:(${this.config.mailSubject})`;
     const threads = this.gmail.search(query);
 
     const sorted = threads
-      .filter(t => t.getMessageCount() === 1)
+      .filter(t => t.getMessageCount() === 2)
       .sort(
         (a, b) =>
           b.getLastMessageDate().getUTCMilliseconds() -
@@ -40,15 +40,15 @@ export class BillingFetcherViaGmail implements BillingFetcher {
       throw Error(`There are no emails that match. query: ${query}`);
     }
 
-    const messages = sorted[0].getMessages();
-    if (messages.length === 0) {
-      throw Error(`There are no messsage in email that match. query: ${query}`);
+    const message = sorted[0].getMessages()[0];
+    if (!message) {
+      throw Error(`There are no messages in email that match. query: ${query}`);
     }
     console.info(
-      `Found email from: ${messages[0].getFrom()}, subject: ${messages[0].getSubject()}`
+      `Found email from: ${message.getFrom()}, subject: ${message.getSubject()}`
     );
 
-    const found = messages[0].getBody().match(this.config.extractRegexp);
+    const found = message.getBody().match(this.config.extractRegexp);
     if (found == null || found.length < 2) {
       throw Error('Failed to Parse billing amount');
     }
