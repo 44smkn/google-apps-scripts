@@ -23,7 +23,7 @@ export class BillingFetcherViaGmail implements BillingFetcher {
   constructor(
     private config: CreditCardBilling,
     private gmail: GoogleAppsScript.Gmail.GmailApp = GmailApp
-  ) { }
+  ) {}
 
   fetch(): number {
     const query = `from:(${this.config.mailAddress}) subject:(${this.config.mailSubject})`;
@@ -44,7 +44,9 @@ export class BillingFetcherViaGmail implements BillingFetcher {
     if (messages.length === 0) {
       throw Error(`There are no messsage in email that match. query: ${query}`);
     }
-    console.info(`Found email from: ${messages[0].getFrom()}, subject: ${messages[0].getSubject()}`);
+    console.info(
+      `Found email from: ${messages[0].getFrom()}, subject: ${messages[0].getSubject()}`
+    );
 
     const found = messages[0].getBody().match(this.config.extractRegexp);
     if (found == null || found.length < 2) {

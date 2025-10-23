@@ -71,7 +71,7 @@ class MailNotifier implements Notifier {
   constructor(
     private readonly recipients: readonly string[],
     private readonly notificationMessage: NotificationMessage
-  ) { }
+  ) {}
 
   notify(): void {
     this.recipients.forEach(recipient => {
@@ -93,7 +93,7 @@ class LINENotifier implements Notifier {
     private readonly channelAccessToken: string,
     private readonly recipient: string,
     private readonly notificationMessage: NotificationMessage
-  ) { }
+  ) {}
 
   notify(): void {
     const payload = {
