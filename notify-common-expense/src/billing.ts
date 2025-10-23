@@ -23,7 +23,7 @@ export class BillingFetcherViaGmail implements BillingFetcher {
   constructor(
     private config: CreditCardBilling,
     private gmail: GoogleAppsScript.Gmail.GmailApp = GmailApp
-  ) { }
+  ) {}
 
   fetch(): number {
     const query = `from:(${this.config.mailAddress}) subject:(${this.config.mailSubject})`;
