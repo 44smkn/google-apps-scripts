@@ -29,20 +29,31 @@ export class BillingFetcherViaGmail implements BillingFetcher {
     const query = `from:(${this.config.mailAddress}) subject:(${this.config.mailSubject})`;
     const threads = this.gmail.search(query);
 
-    const sorted = threads
-      .filter(t => t.getMessageCount() === 2)
-      .sort(
-        (a, b) =>
-          b.getLastMessageDate().getUTCMilliseconds() -
-          a.getLastMessageDate().getUTCMilliseconds()
-      );
+    const sorted = threads.sort(
+      (a, b) =>
+        b.getLastMessageDate().getUTCMilliseconds() -
+        a.getLastMessageDate().getUTCMilliseconds()
+    );
     if (sorted.length === 0) {
       throw Error(`There are no emails that match. query: ${query}`);
     }
 
-    const message = sorted[0].getMessages()[0];
+    let message: GoogleAppsScript.Gmail.GmailMessage | undefined;
+    for (const thread of sorted) {
+      const candidate = thread.getMessages()[0];
+      if (
+        candidate &&
+        candidate.getPlainBody().includes(this.config.bodyIdentifier)
+      ) {
+        message = candidate;
+        break;
+      }
+    }
+
     if (!message) {
-      throw Error(`There are no messages in email that match. query: ${query}`);
+      throw Error(
+        `No email matching bodyIdentifier "${this.config.bodyIdentifier}" found. query: ${query}`
+      );
     }
     console.info(
       `Found email from: ${message.getFrom()}, subject: ${message.getSubject()}`

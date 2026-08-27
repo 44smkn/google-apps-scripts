@@ -29,15 +29,18 @@ export class CreditCardBilling {
   readonly mailAddress: string;
   readonly mailSubject: string;
   readonly extractRegexp: RegExp;
+  readonly bodyIdentifier: string;
 
   constructor(props: PropertyStore) {
     const mailAddressKey = 'shared-credit-billing-mail-address';
     const mailSubjectKey = 'shared-credit-billing-mail-subject';
     const extractRegexpKey = 'shared-credit-billing-extract-regexp';
+    const bodyIdentifierKey = 'shared-credit-billing-body-identifier';
 
     this.mailAddress = getProperty(props, mailAddressKey);
     this.mailSubject = getProperty(props, mailSubjectKey);
     this.extractRegexp = new RegExp(getProperty(props, extractRegexpKey));
+    this.bodyIdentifier = getProperty(props, bodyIdentifierKey);
   }
 }
 
